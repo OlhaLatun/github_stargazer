@@ -9,7 +9,7 @@ const markup = {
         </div>
     `
   },
-  details ({ full_name, clone_url, watchers, stargazers_count, forks }) {
+  details ({ full_name, clone_url, watchers, stargazers_count, forks }, langs, sum) {
     return `<h2>${full_name} </h2> <span><a href="${clone_url}" target="_blank">Clone</a></span>
             <div class="col-6">
         Stats:
@@ -17,6 +17,15 @@ const markup = {
                     <li>Watchers: ${watchers}</li>
                     <li>Stars: ${stargazers_count}</li>
                     <li>Forks: ${forks}</li>
+                </ul>
+            </div>
+            <div class="col-6">
+          Languages:
+                <ul>
+                  ${ langs.map(lang => {  
+                   return  `<li>${lang[0]}: ${(lang[1] * 100/ sum).toFixed(1)}%</li>`
+                  }).join(' ')
+                  }
                 </ul>
             </div>
     `

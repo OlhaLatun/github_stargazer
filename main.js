@@ -60,8 +60,8 @@ function saveToLocalStorage (repoData) {
 
 function displayRepos (repos) {
   const sorted = repos.sort((a, b) => b.stargazers_count - a.stargazers_count)
-  sorted.forEach(obj => {
-    container.insertAdjacentHTML('beforeend', markup.repository(obj))
+  sorted.forEach(r => {
+    container.insertAdjacentHTML('beforeend', markup.repository(r))
   })
 }
 
@@ -69,7 +69,6 @@ function displayRepos (repos) {
     deleteRepo(event.target)
     goToRepoDetails(event.target)
   })
-
 
 function goToRepoDetails (target) {
   if (target.id === 'repoName') {
