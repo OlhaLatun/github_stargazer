@@ -16,32 +16,32 @@ addBtn.addEventListener('click', (event) => {
   container.innerHTML = ''
   const org = input.value.slice(0, input.value.indexOf('/'))
   const repoName = input.value.slice(input.value.indexOf('/') + 1)
-  const url = `https://api.github.com/orgs/${org}/repos`
+  const url = `https://api.github.com/repos/${org}/${repoName}`
   getData(url)
     .then(data => getRepo(data, repoName, org))
-    .catch(err => console.error(err))
+    .catch(err => handleErr() )
 })
 
-function getRepo (data, name, org) {
-  const repo = data.find(repo => repo.name === name)
-  if (repo) {
+function handleErr() {
+  notFoundMessage.classList.remove('visually-hidden')
+  displayRepos(getLocalStorage())
+}
+
+function getRepo (data) {
     const repoData = {
-      id: repo.id,
-      org: org,
-      name: repo.name,
-      full_name: repo.full_name,
-      stargazers_count: repo.stargazers_count,
-      forks: repo.forks,
-      clone_url: repo.clone_url,
-      watchers: repo.watchers,
-      lang_url: repo.languages_url
+      id: data.id,
+      org: data.org,
+      name: data.name,
+      full_name: data.full_name,
+      stargazers_count: data.stargazers_count,
+      forks: data.forks,
+      clone_url: data.clone_url,
+      watchers: data.watchers,
+      lang_url: data.languages_url
     }
+
     displayRepos(saveToLocalStorage(repoData))
     notFoundMessage.classList.add('visually-hidden')
-  } else {
-    displayRepos(getLocalStorage())
-    notFoundMessage.classList.remove('visually-hidden')
-  }
 }
 
 function saveToLocalStorage (repoData) {
@@ -66,11 +66,13 @@ function displayRepos (repos) {
 }
 
   container.addEventListener('click', (event) => {
+    console.log(event)
     deleteRepo(event.target)
     goToRepoDetails(event.target)
   })
 
 function goToRepoDetails (target) {
+
   if (target.id === 'repoName') {
     localStorage.setItem('redirectTo', target.innerHTML)
     window.open('./details.html', 'target_blank')
